@@ -1,0 +1,16 @@
+<h1 id="tableLabel">Company names</h1>
+
+<p *ngIf="!companies"><em>Loading...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="companies">
+  <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let company of companies">
+      <td>{{ company }}</td>
+    </tr>
+  </tbody>
+</table>
