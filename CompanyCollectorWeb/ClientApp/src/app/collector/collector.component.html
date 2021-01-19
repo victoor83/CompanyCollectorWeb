@@ -1,6 +1,7 @@
-<h1 id="tableLabel">Company names</h1>
-
-<p *ngIf="!companies"><em>Loading...</em></p>
+<h1 id="tableLabel" class="margin-bottom">Company names</h1>
+<p></p><p></p>
+<button class="btn btn-primary" (click)="getCompanies()">Get companies</button>
+<p><em>{{statusText}}</em></p>
 
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="companies">
   <thead>

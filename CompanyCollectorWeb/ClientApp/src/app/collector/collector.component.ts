@@ -8,12 +8,24 @@ import { Component, Inject, OnInit } from '@angular/core';
 })
 export class CollectorComponent implements OnInit {
   public companies: string[];
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<string[]>(baseUrl + 'collector').subscribe(result => {
-      this.companies = result;
-    }, error => console.error(error));
+  public statusText: string;
+  private url: string;
+  private httpClient: HttpClient;
+
+  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {;
+    this.url = baseUrl + 'CompanyCollector';
+    this.httpClient = http;
   }
 
   ngOnInit(): void {
+  }
+
+  getCompanies(): void
+  {
+    this.statusText = 'Loading...';
+    this.httpClient.get<string[]>(this.url).subscribe(result => {
+        this.companies = result;
+        this.statusText = '';
+      }, error => console.error(error));
   }
 }
