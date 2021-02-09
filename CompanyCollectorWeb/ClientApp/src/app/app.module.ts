@@ -7,8 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
+import { AboutComponent } from './About/about.component';
 import { CollectorComponent } from './collector/collector.component';
 
 @NgModule({
@@ -16,8 +15,7 @@ import { CollectorComponent } from './collector/collector.component';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
+    AboutComponent,
     CollectorComponent
   ],
   imports: [
@@ -26,8 +24,7 @@ import { CollectorComponent } from './collector/collector.component';
     FormsModule,
     RouterModule.forRoot([
     { path: '', component: HomeComponent, pathMatch: 'full' },
-    { path: 'counter', component: CounterComponent },
-    { path: 'fetch-data', component: FetchDataComponent },
+    { path: 'about', component: AboutComponent },
     { path: 'collector', component: CollectorComponent }
 ], { relativeLinkResolution: 'legacy' })
   ],
