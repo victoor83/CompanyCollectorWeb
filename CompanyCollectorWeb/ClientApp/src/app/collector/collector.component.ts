@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
+import { CsvExportServiceService } from '../csv-export-service.service';
 
 @Component({
   selector: 'app-collector',
@@ -25,6 +26,7 @@ export class CollectorComponent implements OnInit {
     this.statusText = 'Loading...';
     this.httpClient.get<string[]>(this.url).subscribe(result => {
         this.companies = result;
+        CsvExportServiceService.exportToCsv('WikSoft_Companies.csv', result);
         this.statusText = '';
       }, error => console.error(error));
   }

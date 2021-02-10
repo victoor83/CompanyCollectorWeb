@@ -70,9 +70,6 @@ namespace CompanyCollectorWeb
             //maximize the browser
             _driver.Manage().Window.Minimize();
 
-            //find the element by xpath and enter the email address which you want to login.
-            //driver.FindElement(By.XPath("//input[@aria-label='Email or phone']")).SendKeys("email adress);
-
             //wait for a seconds
             Task.Delay(1000).Wait();
 
