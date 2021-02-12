@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.10" />
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="88.0.4324.9600" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,9 +53,4 @@
       </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="xcopy &quot;$(SolutionDir)chromedriver.exe&quot; &quot;$(SolutionDir)$(SolutionName)\$(OutDir)&quot; /Y /c" />
-  </Target>
-
 </Project>
