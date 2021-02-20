@@ -1,3 +1,4 @@
+using CompanyCollectorWeb.HubConfig;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -5,6 +6,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace CompanyCollectorWeb
 {
@@ -20,6 +22,15 @@ namespace CompanyCollectorWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => builder
+                    .WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
             services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -50,12 +61,15 @@ namespace CompanyCollectorWeb
             }
 
             app.UseRouting();
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
+               
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<CompanyHub>("/companyHub");
             });
 
             app.UseSpa(spa =>
@@ -64,7 +78,7 @@ namespace CompanyCollectorWeb
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
                 spa.Options.SourcePath = "ClientApp";
-
+                spa.Options.StartupTimeout = new TimeSpan(0, 10, 0);
                 if (env.IsDevelopment())
                 {
                     spa.UseAngularCliServer(npmScript: "start");
