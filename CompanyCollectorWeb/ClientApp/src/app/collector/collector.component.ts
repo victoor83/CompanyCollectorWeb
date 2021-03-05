@@ -35,4 +35,9 @@ export class CollectorComponent implements OnInit {
         this.statusText = '';
       }, error => console.error(error));
   }
+
+  getCurrentListCount(): number 
+  {
+      return this.signalList.length; 
+  }
 }
