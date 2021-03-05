@@ -2,6 +2,8 @@
 {
     public class CompanyModel
     {
-        public string Company { get; set; }
+        public string CompanyName { get; set; }
+
+        public int companiesCount { get; set; }
     }
 }

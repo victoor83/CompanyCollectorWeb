@@ -1,3 +1,4 @@
 export class CompanyViewModel {
-    company: string;
+    companyName: string
+    companiesCount: number
 }

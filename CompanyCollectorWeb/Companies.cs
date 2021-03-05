@@ -34,6 +34,7 @@ namespace CompanyCollectorWeb
             string url = "https://www.europages.de/unternehmen/Produktion.html";
 
             var companyList = new List<string>();
+            int companiesCountInPage = 0;
 
             try
             {
@@ -42,13 +43,18 @@ namespace CompanyCollectorWeb
                     if(i > 1)
                     {
                         var pageCompanyList = await GetCompaniesFromPage($"https://www.europages.de/unternehmen/pg-{i}/Produktion.html");
-                        pageCompanyList.ToList().ForEach(item => companyArrived(new CompanyModel() {Company = item}));
+                        pageCompanyList.ToList().ForEach(item => companyArrived(new CompanyModel {CompanyName = item}));
                         companyList.AddRange(pageCompanyList);
                     }
                     else
                     {
                         var pageCompanyList = await GetCompaniesFromPage(url);
-                        pageCompanyList.ToList().ForEach(item => companyArrived(new CompanyModel() {Company = item}));
+                        if(companiesCountInPage == 0)
+                        {
+                            companiesCountInPage = pageAmount * pageCompanyList.Count();
+                        }
+
+                        pageCompanyList.ToList().ForEach(item => companyArrived(new CompanyModel {CompanyName = item, companiesCount = companiesCountInPage}));
                         companyList.AddRange(pageCompanyList);
                     }
 

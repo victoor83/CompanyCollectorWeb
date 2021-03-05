@@ -28,7 +28,7 @@ export class CollectorComponent implements OnInit {
 
   getCompanies(): void
   {
-    this.statusText = 'Loading with SignalR...';
+    this.statusText = 'Loading...';
     this.signalList = [];
     this.httpClient.get<string[]>(this.url).subscribe(result => {
         CsvExportServiceService.exportToCsv('WikSoft_Companies.csv', result);
@@ -36,8 +36,13 @@ export class CollectorComponent implements OnInit {
       }, error => console.error(error));
   }
 
-  getCurrentListCount(): number 
+  getCurrentListCount(): string 
   {
-      return this.signalList.length; 
+      if(this.signalList.length > 0)
+       {
+          return this.signalList.length + " / " + this.signalList[0].companiesCount ; 
+       }
+
+       return "--";
   }
 }

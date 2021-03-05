@@ -4,17 +4,17 @@
 
 <p><em>{{statusText}}</em></p>
 
-<p *ngIf="signalList"><em>Done: {{getCurrentListCount()}}</em></p>
+<p *ngIf="signalList.length"><em>Done: {{getCurrentListCount()}}</em></p>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="signalList">
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="signalList.length">
   <thead>
     <tr>
       <th>Name</th>
     </tr>
   </thead>
-  <tbody *ngIf="signalList">
+  <tbody *ngIf="signalList.length">
     <tr *ngFor="let company of signalList">
-      <td>{{ company.company }}</td>
+      <td>{{ company.companyName }}</td>
     </tr>
   </tbody>
 </table>
