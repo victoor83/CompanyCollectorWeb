@@ -16,7 +16,7 @@ import { CollectorComponent } from './collector/collector.component';
     NavMenuComponent,
     HomeComponent,
     AboutComponent,
-    CollectorComponent
+    CollectorComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

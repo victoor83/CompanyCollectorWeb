@@ -1,7 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using CompanyCollectorWeb.HubConfig;
+using CompanyCollectorWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CompanyCollectorWeb.Controllers
 {
@@ -9,14 +12,32 @@ namespace CompanyCollectorWeb.Controllers
     [Route("[controller]")]
     public class CompanyCollectorController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IHubContext<CompanyHub> _hubContext;
+
+        public CompanyCollectorController(IHubContext<CompanyHub> hub)
         {
-            Companies companies = new Companies();
+            _hubContext = hub;
+        }
 
-            var names = companies.GetCompanies(3);
+        [HttpGet]
+        public async Task<IEnumerable<string>> Get()
+        {
+            Companies companies = new Companies(s =>
+            {
+                Debug.WriteLine(s);
+            });
+            return await companies.GetCompanies(CompanyArrived, 50);
+        }
 
-            return names.ToArray();
+        [HttpPost]
+        [Route("deliverypoint")]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(200, Type = typeof(bool))]
+        public async Task<IActionResult> CompanyArrived(CompanyModel companyModel)
+        {
+            await _hubContext.Clients.All.SendAsync("CompanyMessageReceived", companyModel);
+
+            return StatusCode(200);
         }
     }
 }

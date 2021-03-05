@@ -1,8 +1,12 @@
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using CompanyCollectorWeb.Models;
+using Microsoft.AspNetCore.Mvc;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
 
 namespace CompanyCollectorWeb
 {
@@ -14,14 +18,18 @@ namespace CompanyCollectorWeb
 
         private DelLogger _logger;
 
-        public Companies(DelLogger logger = null)
+        private readonly Action<string> _sendSignalMessage;
+
+        public Companies(Action<string> sendSignalMessage, DelLogger logger = null)
         {
             //Initialize the instance
+
             _driver = new ChromeDriver();
             _logger = logger;
+            _sendSignalMessage = sendSignalMessage;
         }
 
-        public List<string> GetCompanies(int pageAmount = 1000)
+        public async Task<IEnumerable<string>> GetCompanies(Func<CompanyModel, Task<IActionResult>> companyArrived = null, int pageAmount = 1000)
         {
             string url = "https://www.europages.de/unternehmen/Produktion.html";
 
@@ -33,17 +41,18 @@ namespace CompanyCollectorWeb
                 {
                     if(i > 1)
                     {
-                        companyList.AddRange(GetCompaniesFromPage($"https://www.europages.de/unternehmen/pg-{i}/Produktion.html"));
+                        var pageCompanyList = await GetCompaniesFromPage($"https://www.europages.de/unternehmen/pg-{i}/Produktion.html");
+                        pageCompanyList.ToList().ForEach(item => companyArrived(new CompanyModel() {Company = item}));
+                        companyList.AddRange(pageCompanyList);
                     }
                     else
                     {
-                        companyList.AddRange(GetCompaniesFromPage(url));
+                        var pageCompanyList = await GetCompaniesFromPage(url);
+                        pageCompanyList.ToList().ForEach(item => companyArrived(new CompanyModel() {Company = item}));
+                        companyList.AddRange(pageCompanyList);
                     }
 
-                    if(_logger != null)
-                    {
-                        _logger("Proceed page nr:" + i);
-                    }
+                    _logger?.Invoke("Proceed page nr:" + i);
                 }
             }
             catch(Exception e)
@@ -62,28 +71,20 @@ namespace CompanyCollectorWeb
             return companyList;
         }
 
-        private List<string> GetCompaniesFromPage(string url)
+        private async Task<IEnumerable<string>> GetCompaniesFromPage(string url)
         {
-            //launch gmail.com
             _driver.Navigate().GoToUrl(url);
-
-            //maximize the browser
             _driver.Manage().Window.Minimize();
 
             //wait for a seconds
-            Task.Delay(1000).Wait();
+            WebDriverWait _wait = new WebDriverWait(_driver, new TimeSpan(0, 1, 0));
+            _wait.Until(d => d.FindElement(By.XPath("//a[contains(@class,'company-name')]")));
 
             //find the Next Button and click on it.
 
             var all = _driver.FindElements(By.XPath("//a[contains(@class,'company-name')]"));
 
-            List<string> lst = new List<string>();
-            foreach(var a in all)
-            {
-                lst.Add(a.Text);
-            }
-
-            return lst;
+            return all.Select(x => x.Text);
         }
     }
 }
