@@ -1,17 +1,18 @@
 <h1 id="tableLabel" class="margin-bottom">Company names</h1>
 <p></p><p></p>
 <button class="btn btn-primary" (click)="getCompanies()">Get companies</button>
+
 <p><em>{{statusText}}</em></p>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="companies">
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="signalList">
   <thead>
     <tr>
       <th>Name</th>
     </tr>
   </thead>
-  <tbody>
-    <tr *ngFor="let company of companies">
-      <td>{{ company }}</td>
+  <tbody *ngIf="signalList">
+    <tr *ngFor="let company of signalList">
+      <td>{{ company.company }}</td>
     </tr>
   </tbody>
 </table>

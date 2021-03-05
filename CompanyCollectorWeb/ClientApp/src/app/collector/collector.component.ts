@@ -10,7 +10,6 @@ import { SignalRService } from '../services/signal-r.service';
   styleUrls: ['./collector.component.css']
 })
 export class CollectorComponent implements OnInit {
-  public companies: string[];
   public statusText: string;
   private url: string;
   private httpClient: HttpClient;
