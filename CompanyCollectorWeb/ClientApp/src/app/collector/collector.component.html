@@ -3,7 +3,7 @@
 <button class="btn btn-primary" (click)="getCompanies()">Get companies</button>
 &nbsp;&nbsp;&nbsp;&nbsp;
 <label for="link">Enter link:&nbsp;</label>
-<input type="text" id="link" name="link" size="90"><br>
+<input type="text" id="link" name="link" size="90" [(ngModel)]="this.linkText" ><br>
 
 <p><em>{{statusText}}</em></p>
 

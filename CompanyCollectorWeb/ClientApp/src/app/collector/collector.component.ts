@@ -11,6 +11,8 @@ import { SignalRService } from '../services/signal-r.service';
 })
 export class CollectorComponent implements OnInit {
   public statusText: string;
+  public linkText: string; //used in html to get the link text
+
   private url: string;
   private httpClient: HttpClient;
   signalList: CompanyViewModel[] = [];
@@ -18,7 +20,7 @@ export class CollectorComponent implements OnInit {
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private signalRService: SignalRService) {
     this.url = baseUrl + 'CompanyCollector';
     this.httpClient = http;
-  }ng
+  }
 
   ngOnInit(){
     this.signalRService.signalReceived.subscribe((company: CompanyViewModel) => {
@@ -28,7 +30,8 @@ export class CollectorComponent implements OnInit {
 
   getCompanies(): void
   {
-    this.statusText = 'Loading...';
+    console.log(this.linkText); //todo: implement link and remove
+    this.statusText = 'Loading...'; 
     this.signalList = [];
     this.httpClient.get<string[]>(this.url).subscribe(result => {
         CsvExportServiceService.exportToCsv('WikSoft_Companies.csv', result);

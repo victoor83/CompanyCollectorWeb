@@ -26,7 +26,7 @@ namespace CompanyCollectorWeb.Controllers
             {
                 Debug.WriteLine(s);
             });
-            return await companies.GetCompanies(CompanyArrived, 50);
+            return await companies.GetCompanies(CompanyArrived, 50); //todo: add link
         }
 
         [HttpPost]
