@@ -23,8 +23,10 @@ namespace CompanyCollectorWeb
         public Companies(Action<string> sendSignalMessage, DelLogger logger = null)
         {
             //Initialize the instance
+            var options = new ChromeOptions();
+            options.AddArguments("headless", "--blink-settings=imagesEnabled=false");
 
-            _driver = new ChromeDriver();
+            _driver = new ChromeDriver(options);
             _logger = logger;
             _sendSignalMessage = sendSignalMessage;
         }
@@ -54,7 +56,7 @@ namespace CompanyCollectorWeb
                             companiesCountInPage = pageAmount * pageCompanyList.Count();
                         }
 
-                        pageCompanyList.ToList().ForEach(item => companyArrived(new CompanyModel {CompanyName = item, companiesCount = companiesCountInPage}));
+                        pageCompanyList.ToList().ForEach(item => companyArrived(new CompanyModel {CompanyName = item, CompaniesCount = companiesCountInPage}));
                         companyList.AddRange(pageCompanyList);
                     }
 
@@ -92,5 +94,56 @@ namespace CompanyCollectorWeb
 
             return all.Select(x => x.Text);
         }
+
+        //private List<string> GetCompaniesFromPage(string url)
+        //{
+        //    _driver.Navigate().GoToUrl(url);
+
+        //    //wait for 0.1 seconds
+        //    Task.Delay(100).Wait();
+
+        //    var pages = _driver.FindElements(By.XPath("//a[contains(@class,'company-name')]"));
+
+        //    List<string> lst = new List<string>();
+
+        //    foreach (var company in pages)
+        //    {
+        //        //Collecting cata of all companies from single page
+        //        string companyLink = company.GetAttribute("href");
+        //        ((IJavaScriptExecutor)_driver).ExecuteScript("window.open();");
+        //        _driver.SwitchTo().Window(_driver.WindowHandles[1]);
+        //        _driver.Navigate().GoToUrl(companyLink);
+        //        Task.Delay(100).Wait();
+        //        lst.Add(string.Join(",", GetCompanyDetails())); //Compiling data of a single company into one string
+        //        _driver.SwitchTo().Window(_driver.WindowHandles[0]);
+        //        Task.Delay(100).Wait();
+        //    }
+
+        //    return lst;
+        //}
+
+        //private List<string> GetCompanyDetails()
+        //{
+        //    //Collecting data of a single company
+        //    List<string> line = new List<string>();
+        //    line.Add(_driver.FindElement(By.XPath("//div[contains(@class, 'company-content')]/h3[contains(@itemprop, 'name')]")).GetAttribute("innerText").Replace(",", "")
+        //        .Replace("\r", "").Replace("\n", " "));
+        //    _logger(line[0]);
+        //    line.Add(_driver.FindElement(By.XPath("//dd[contains(@class, 'company-country')]/span[2]")).GetAttribute("innerText").Replace(",", "").Replace("\r", "")
+        //        .Replace("\n", " "));
+        //    line.Add(_driver.FindElement(By.XPath("//dd[contains(@itemprop, 'addressLocality')]/pre")).GetAttribute("innerText").Replace(",", "").Replace("\r", "")
+        //        .Replace("\n", " "));
+        //    try
+        //    {
+        //        line.Add(_driver.FindElement(By.XPath("//div[contains(@class, 'page__layout-sidebar--container-desktop')]/a[contains(@itemprop, 'url')]")).GetAttribute("href"));
+        //    }
+        //    catch (NoSuchElementException)
+        //    {
+        //        line.Add("This company has no website.");
+        //    }
+
+        //    line.Add(_driver.FindElement(By.XPath("//p[contains(@class, 'company-description')]")).GetAttribute("innerText").Replace(",", "").Replace("\r", "").Replace("\n", " "));
+        //    return line;
+        //}
     }
 }

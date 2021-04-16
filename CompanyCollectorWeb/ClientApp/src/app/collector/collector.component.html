@@ -13,11 +13,17 @@
   <thead>
     <tr>
       <th>Name</th>
+      <th>Address</th>
+      <th>Web</th>
+      <th>Details</th>
     </tr>
   </thead>
   <tbody *ngIf="signalList.length">
     <tr *ngFor="let company of signalList">
       <td>{{ company.companyName }}</td>
+      <td>{{ company.companiesCount }}</td>
+      <td>www.wiksoft.com</td>
+      <td>It is about me and you...</td>
     </tr>
   </tbody>
 </table>
